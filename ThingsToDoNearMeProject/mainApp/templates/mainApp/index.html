@@ -3,17 +3,247 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Things-To-Do-Near-Me!</title>
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 </head>
 
     <body>
 
         <h1 id="title">NearMe.com</h1>
 
+        <div id="map"></div>
 
-    </body>
-
+        <script>(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
+            ({key: "AIzaSyBsjbLLe2RaAjIzUe5lxKb7wLFvebnX2gY", v: "weekly"});</script>
 </html>
+
+<script>
+// let map;
+
+// async function initMap() {
+//   const { Map } = await google.maps.importLibrary("maps");
+
+//   map = new Map(document.getElementById("map"), {
+//     center: { lat: 40.756250, lng: -73.791810 },
+//     zoom: 24,
+//   });
+// }
+
+// initMap();
+const tourStops = [
+    {
+      position: { lat: 34.8791806, lng: -111.8265049 },
+      title: "Boynton Pass",
+    },
+    {
+      position: { lat: 34.8559195, lng: -111.7988186 },
+      title: '<div class="j"> herby <div>',
+    },
+    {
+      position: { lat: 34.832149, lng: -111.7695277 },
+      title: "Chapel of the Holy Cross",
+    },
+    {
+      position: { lat: 34.823736, lng: -111.8001857 },
+      title: "Red Rock Crossing",
+    },
+    {
+      position: { lat: 34.800326, lng: -111.7665047 },
+      title: "Bell Rock",
+    },
+  ];
+
+</script>
+<script>
+
+  async function initMap() {
+    // Request needed libraries.
+    const { Map, InfoWindow } = await google.maps.importLibrary("maps");
+    const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary(
+      "marker",
+    );
+    const map = new Map(document.getElementById("map"), {
+      zoom: 12,
+      center: { lat: 34.84555, lng: -111.8035 },
+      mapId: " DEMO_MAP_ID ",
+    });
+    // Set LatLng and title text for the markers. The first marker (Boynton Pass)
+    // receives the initial focus when tab is pressed. Use arrow keys to
+    // move between markers; press tab again to cycle through the map controls.
+    
+    // Create an info window to share between markers.
+    const infoWindow = new InfoWindow();
+
+    // Create the markers.
+    tourStops.forEach(({ position, title }, i) => {
+      // const pin = new PinElement({
+      //   glyph: `${i + 1}`,
+      // });
+      const marker = new AdvancedMarkerElement({
+        position,
+        map:map,
+        // title: `${i + 1}. ${title}`,
+        // content: pin.element,
+      });
+
+      // Add a click listener for each marker, and set up the info window.
+      marker.addListener("click", ({ domEvent, latLng }) => {
+        const { target } = domEvent;
+
+        infoWindow.close();
+        infoWindow.setContent(`${i + 1}. ${title}`);
+        infoWindow.open(marker.map, marker);
+      });
+    });
+}
+
+initMap();
+</script>
+
+<script>
+//     let map;
+
+// async function initMap() {
+//   // The location of Uluru
+//   const position = { lat: -25.344, lng: 131.031 };
+//   // Request needed libraries.
+//   //@ts-ignore
+//   const { Map } = await google.maps.importLibrary("maps");
+// //   const { AdvancedMarkerElement } = await google.maps.importLibrary("marker");
+
+//   // The map, centered at Uluru
+//   map = new Map(document.getElementById("map"), {
+//     zoom: 4,
+//     center: position,
+//     // mapId: "DEMO_MAP_ID",
+//   });
+
+  // The marker, positioned at Uluru
+//   const marker = new AdvancedMarkerElement({
+//     map: map,
+//     position: position,
+//     title: "MyMarkerRob",
+//   });
+
+// data = [
+//         {eventName: 'firstEvent', desc: 'first description', position: {lat: -27.344, lng: 134.031}},
+//         {eventName: 'secondEvent', desc: 'second description', position: {lat: -25.344, lng: 130.031}}
+// ];
+
+// markersArray = [];
+
+// for (event of data){
+
+//   tempObj = {};
+
+//   let infoWindow = new google.maps.InfoWindow({
+//     content: data.desc,
+//     ariaLabel: "here",
+//   });
+
+//   let marker = new google.maps.Marker({
+//     position: data.position,
+//     map: map,
+//     title: data.eventName +"MarkerTitle",
+//   });
+
+//   marker.addListener("click", () => {
+//     infoWindow.open({
+//       anchor: marker,
+//       map,
+//     });
+//   });
+
+// }
+// const infowindow = new google.maps.InfoWindow({
+//     content: 'fuckYourself',
+//     ariaLabel: "here",
+//   });
+
+//   const marker = new google.maps.Marker({
+//     position: { lat: -27.344, lng: 134.031 },
+//     map: map,
+//     title: "anotherMarker",
+//   });
+
+
+//   marker.addListener("click", () => {
+//     infowindow.open({
+//       anchor: marker,
+//       map,
+//     });
+//   });
+// }
+
+// initMap();
+
+
+    // async function initMap() {
+    //     // Request needed libraries.
+    //     const { Map, InfoWindow } = await google.maps.importLibrary("maps");
+    //     const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary(
+    //         "marker",
+    //     );
+    //     const map = new Map(document.getElementById("map"), {
+    //         zoom: 12,
+    //         center: { lat: 34.84555, lng: -111.8035 },
+    //         mapId: "4504f8b37365c3d0",
+    //     });
+    //     // Set LatLng and title text for the markers. The first marker (Boynton Pass)
+    //     // receives the initial focus when tab is pressed. Use arrow keys to
+    //     // move between markers; press tab again to cycle through the map controls.
+    //     const tourStops = [
+    //         {
+    //         position: { lat: 34.8791806, lng: -111.8265049 },
+    //         title: "Boynton Pass",
+    //         },
+    //         {
+    //         position: { lat: 34.8559195, lng: -111.7988186 },
+    //         title: "Airport Mesa",
+    //         },
+    //         {
+    //         position: { lat: 34.832149, lng: -111.7695277 },
+    //         title: "Chapel of the Holy Cross",
+    //         },
+    //         {
+    //         position: { lat: 34.823736, lng: -111.8001857 },
+    //         title: "Red Rock Crossing",
+    //         },
+    //         {
+    //         position: { lat: 34.800326, lng: -111.7665047 },
+    //         title: "Bell Rock",
+    //         },
+    //     ];
+    //     // Create an info window to share between markers.
+    //     const infoWindow = new InfoWindow();
+
+    //     // Create the markers.
+    //     tourStops.forEach(({ position, title }, i) => {
+    //         const pin = new PinElement({
+    //         glyph: `${i + 1}`,
+    //         });
+    //         const marker = new AdvancedMarkerElement({
+    //         position,
+    //         map,
+    //         title: `${i + 1}. ${title}`,
+    //         content: pin.element,
+    //         });
+
+    //         // Add a click listener for each marker, and set up the info window.
+    //         marker.addListener("click", ({ domEvent, latLng }) => {
+    //         const { target } = domEvent;
+
+    //         infoWindow.close();
+    //         infoWindow.setContent(marker.title);
+    //         infoWindow.open(marker.map, marker);
+    //         });
+    //     });
+    // }
+
+    // initMap();
+
+</script>
 
 <style>
 
@@ -29,6 +259,14 @@
     #title{
         color: red;
 
+    }
+    .j{
+      color:blue;
+    }
+
+    #map{
+        height: 400px;
+        width:400px;
     }
 </style>
 
