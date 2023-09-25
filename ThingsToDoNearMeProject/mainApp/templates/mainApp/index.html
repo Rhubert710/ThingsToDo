@@ -33,25 +33,27 @@
 // initMap();
 const tourStops = [
     {
-      position: { lat: 34.8791806, lng: -111.8265049 },
-      title: "Boynton Pass",
+      position: { lat: 40.756248, lng: -73.791809 },
+      title: "title",
+      desc: "HOUSE PARTYY!!!!",
+      address: '44-02 189th St.'
     },
-    {
-      position: { lat: 34.8559195, lng: -111.7988186 },
-      title: '<div class="j"> herby <div>',
-    },
-    {
-      position: { lat: 34.832149, lng: -111.7695277 },
-      title: "Chapel of the Holy Cross",
-    },
-    {
-      position: { lat: 34.823736, lng: -111.8001857 },
-      title: "Red Rock Crossing",
-    },
-    {
-      position: { lat: 34.800326, lng: -111.7665047 },
-      title: "Bell Rock",
-    },
+    // {
+    //   position: { lat: 34.8559195, lng: -111.7988186 },
+    //   title: '<div class="j"> herby <div>',
+    // },
+    // {
+    //   position: { lat: 34.832149, lng: -111.7695277 },
+    //   title: "Chapel of the Holy Cross",
+    // },
+    // {
+    //   position: { lat: 34.823736, lng: -111.8001857 },
+    //   title: "Red Rock Crossing",
+    // },
+    // {
+    //   position: { lat: 34.800326, lng: -111.7665047 },
+    //   title: "Bell Rock",
+    // },
   ];
 
 </script>
@@ -65,7 +67,7 @@ const tourStops = [
     );
     const map = new Map(document.getElementById("map"), {
       zoom: 12,
-      center: { lat: 34.84555, lng: -111.8035 },
+      center: { lat: 40.756248, lng: -73.791809 },
       mapId: " DEMO_MAP_ID ",
     });
     // Set LatLng and title text for the markers. The first marker (Boynton Pass)
@@ -76,7 +78,7 @@ const tourStops = [
     const infoWindow = new InfoWindow();
 
     // Create the markers.
-    tourStops.forEach(({ position, title }, i) => {
+    tourStops.forEach(({ position, title, desc, address }, i) => {
       // const pin = new PinElement({
       //   glyph: `${i + 1}`,
       // });
@@ -92,7 +94,15 @@ const tourStops = [
         const { target } = domEvent;
 
         infoWindow.close();
-        infoWindow.setContent(`${i + 1}. ${title}`);
+        infoWindow.setContent(`
+          <div class="infoWindow">
+            <div class="eventDescription">
+              ${desc}
+            </div>
+            <div class="eventAddress">
+              ${address}
+            </div>
+          </div>`);
         infoWindow.open(marker.map, marker);
       });
     });
@@ -267,6 +277,10 @@ initMap();
     #map{
         height: 400px;
         width:400px;
+    }
+
+    .eventAddress{
+      font-size: x-small;
     }
 </style>
 
