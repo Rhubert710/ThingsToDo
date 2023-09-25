@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Things-To-Do-Near-Me!</title>
+    <title>{{ pageTitle }}</title>
 
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 </head>
 
     <body>
 
-        <h1 id="title">NearMe.com</h1>
+        <h1 id="logo">NearMe.com</h1>
 
         <div id="map"></div>
+
+        <a id="addEventButton" href="/addEventForm"> 
+          Add a Thing 
+        </a>
 
         <script>(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})
             ({key: "AIzaSyBsjbLLe2RaAjIzUe5lxKb7wLFvebnX2gY", v: "weekly"});</script>
@@ -109,7 +113,10 @@ const tourStops = [
     });
 }
 
-initMap();
+setTimeout(() => {
+  initMap();
+}, 5000);
+
 </script>
 
 <script>
@@ -267,7 +274,7 @@ initMap();
         align-items: center;
         justify-content: center;
     }
-    #title{
+    #logo{
         color: red;
 
     }
@@ -276,12 +283,46 @@ initMap();
     }
 
     #map{
-        height: 400px;
-        width:400px;
+        height: 75vh;
+        width:99%;
+        background-color: blue;
     }
 
     .eventAddress{
       font-size: x-small;
     }
+
+    #addEventButton{
+      margin: 1em;
+      text-decoration: inherit;
+      color: inherit;
+      cursor: auto;
+      appearance: auto;
+
+    text-rendering: auto;
+    color: buttontext;
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    box-sizing: border-box;
+    background-color: buttonface;
+    writing-mode: horizontal-tb !important;
+    /* margin: 0em; */
+    padding-block: 1px;
+    padding-inline: 6px;
+    border-width: 2px;
+    border-style: outset;
+    border-color: buttonborder;
+    border-image: initial;
+
+    }
+    
 </style>
 
