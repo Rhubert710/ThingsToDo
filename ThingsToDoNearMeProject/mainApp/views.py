@@ -9,7 +9,7 @@ def index(request):
     return render(request, "mainApp/index.html", context)
 
 def addEventForm(request):
-    return render(request, "mainApp/addEventForm.html")
+    return render(request, "mainApp/addEventForm.html", { 'pageTitle' : pageTitle})
 
 pageTitle = 'Things-to-do-near-me!'
 
