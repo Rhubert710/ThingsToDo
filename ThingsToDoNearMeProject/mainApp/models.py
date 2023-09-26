@@ -3,13 +3,13 @@ from django.db import models
 
 class Event(models.Model):
 
-    title = models.CharField(max_length=200)
-    Description = models.CharField(max_length=200)
-    date = models.DateField()
+    title = models.CharField(max_length=200, null=True, blank=True)
+    Description = models.CharField(max_length=200, null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
     # Day_of_week = models.CharField(max_length=10)
-    address = models.CharField(max_length=200)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
+    address = models.CharField(max_length=200, null=True, blank=True)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
     # Flyer = models.ForeignKey(Flyer, on_delete=models.CASCADE)
 
     pub_date = models.DateTimeField(auto_now_add=True)
