@@ -24,12 +24,20 @@
 
 <script>
 
-const events = [
+let events = [
     {
-      position:  { lat: 40.756248, lng: -73.791809 } ,
+      latitude: 40.756248, 
+      longitude: -73.791809,
       title: "title",
-      desc: "HOUSE PARTYY!!!!",
+      description: "HOUSE PARTYY!!!!",
       address: '44-02 189th St.'
+    },
+    {
+      latitude: 40.757890, 
+      longitude: -73.779770,
+      title: "title",
+      description: "YY!!!!",
+      address: '44-02'
     },
   ]
 
@@ -45,12 +53,12 @@ const events = [
 
     //getData
     const response = await fetch("http://127.0.0.1:8000/getEvents");
-    const movies = await response.json();
-    console.log(movies);
+    const data = await response.json();
+    console.log(data);
+    events = events.concat(data);
+    console.log(events);
 
 
-
-    
     const map = new Map(document.getElementById("map"), {
       zoom: 12,
       center: { lat: 40.756248, lng: -73.791809 },
@@ -65,12 +73,12 @@ const events = [
     const infoWindow = new InfoWindow();
 
     // Create the markers.
-    events.forEach(({ position, title, desc, address }, i) => {
+    events.forEach(({ latitude, longitude, title, description, address }, i) => {
       // const pin = new PinElement({
       //   glyph: `${i + 1}`,
       // });
       const marker = new AdvancedMarkerElement({
-        position,
+        position:{lat:latitude, lng:longitude},
         map:map,
         // title: `${i + 1}. ${title}`,
         // content: pin.element,
@@ -84,7 +92,7 @@ const events = [
         infoWindow.setContent(`
           <div class="infoWindow">
             <div class="eventDescription">
-              ${desc}
+              ${description}
             </div>
             <div class="eventAddress">
               ${address}
@@ -97,7 +105,7 @@ const events = [
 
 setTimeout(() => {
   initMap();
-}, 5000);
+}, 1000);
 
 
 </script>

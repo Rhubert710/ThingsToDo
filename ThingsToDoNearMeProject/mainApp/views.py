@@ -25,10 +25,19 @@ def addEventForm(request):
 def postEvent(request):
     
     p = request.POST.dict()
+    newEvent = Event(title=p['titleInput'], description=p['descriptionInput'], date=p['dateInput'], address=p['addressInput'])
 
     #get geocode
-    r = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=4402 189 st flushing ny=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg')
-    newEvent = Event(title=p['titleInput'], description=p['descriptionInput'], date=p['dateInput'], address=p['addressInput']).save()
+    r = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=4402 189 st flushing ny&key=AIzaSyBsjbLLe2RaAjIzUe5lxKb7wLFvebnX2gY')
+    print(r.text)
+    rj= json.loads(r.text)
+    print(rj['results'][0]['geometry']['location'])
+    print(rj['results'][0]['geometry']['location']['lat'])
+
+    newEvent.latitude = rj['results'][0]['geometry']['location']['lat']
+    newEvent.longitude = rj['results'][0]['geometry']['location']['lng']
+
+    newEvent.save()
     return render(request, "mainApp/index.html")
 
 pageTitle = 'Things-to-do-near-me!'
