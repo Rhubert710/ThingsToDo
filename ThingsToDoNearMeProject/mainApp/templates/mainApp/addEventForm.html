@@ -11,7 +11,7 @@
 
         <h1 id="logo">Things-Do-Near-Me</h1>
 
-        <form action="/postEvent">
+        <form onsubmit="return validateForm()" action="/postEvent/" method="post"> {% csrf_token %}
 
             <div id="textInputsDiv">
 
@@ -22,7 +22,7 @@
                 <textarea name="descriptionInput" id="descriptionInput" rows="9"></textarea>
 <br>
                 <label for="addressInput">Address</label>
-                <input type="text" name="adressInput">
+                <input type="text" name="addressInput">
 <br>
                 <label for="dateInput">Date</label>
                 <input type="date" name="dateInput">            
@@ -38,10 +38,20 @@
                 </div>
             </div>
 
+            <button type="submit" id="submitButton"> Submit </button>
         </form>
         
     </body>
 </html>
+
+
+<script>
+    function validateForm() {
+       console.log('lllll');
+       return false
+
+    }
+</script>
 
 <style>
 
@@ -138,8 +148,3 @@ textarea{
 
 } */
 </style>
-
-<script>
-
-console.log(document.querySelector('input::file-selector-button'))
-</script>
