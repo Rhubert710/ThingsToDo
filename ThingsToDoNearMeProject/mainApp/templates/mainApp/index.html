@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ pageTitle }}</title>
+    <title>Things To Do Near Me!</title>
 
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 </head>
 
     <body>
 
-        <h1 id="logo">NearMe.com</h1>
+        <h1 id="logo">Things-To-Do-Near-Me.com</h1>
 
         <div id="map"></div>
 
@@ -73,7 +73,7 @@ let events = [
     const infoWindow = new InfoWindow();
 
     // Create the markers.
-    events.forEach(({ latitude, longitude, title, description, address }, i) => {
+    data.forEach(({ latitude, longitude, title, description, address, date }, i) => {
       // const pin = new PinElement({
       //   glyph: `${i + 1}`,
       // });
@@ -91,6 +91,9 @@ let events = [
         infoWindow.close();
         infoWindow.setContent(`
           <div class="infoWindow">
+            <div class="eventAddress">
+              ${date}
+            </div>
             <div class="eventDescription">
               ${description}
             </div>
@@ -103,9 +106,9 @@ let events = [
     });
 }
 
-setTimeout(() => {
+// setTimeout(() => {
   initMap();
-}, 1000);
+// }, 1000);
 
 
 </script>
@@ -131,9 +134,11 @@ setTimeout(() => {
     }
 
     #map{
-        height: 75vh;
+        /* height: 75vh;
         width:99%;
-        background-color: blue;
+        background-color: blue; */
+        height:400px;
+        width: 600px;
     }
 
     .eventAddress{
