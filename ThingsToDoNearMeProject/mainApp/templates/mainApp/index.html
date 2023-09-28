@@ -52,7 +52,7 @@ let events = [
 
 
     //getData
-    const response = await fetch("http://127.0.0.1:8000/getEvents");
+    const response = await fetch("/getEvents");
     const data = await response.json();
     console.log(data);
     events = events.concat(data);
