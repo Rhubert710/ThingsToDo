@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 
 from mainApp.models import *
 import json
-import requests
+import requests , datetime
 
 
 def indexDemo(request):
@@ -16,8 +16,9 @@ def index(request):
     return render(request, "mainApp/index.html", context)
 
 def getEvents(request):
-    l = get_list_or_404(Event.objects.all().values())
-    return JsonResponse(l, safe=False)
+    l = Event.objects.filter(date__gte = datetime.date.today()).values() #Time on db seems to be three hours ahead of local time.
+    # print(datetime.date.today())
+    return JsonResponse(list(l), safe=False)
 
 def addEventForm(request):
     return render(request, "mainApp/addEventForm.html", { 'pageTitle' : pageTitle})
@@ -28,11 +29,11 @@ def postEvent(request):
     newEvent = Event(title=p['titleInput'], description=p['descriptionInput'], date=p['dateInput'], address=p['addressInput'])
 
     #get geocode
-    r = requests.get('https://maps.googleapis.com/maps/api/geocode/json?address=4402 189 st flushing ny&key=AIzaSyBsjbLLe2RaAjIzUe5lxKb7wLFvebnX2gY')
-    print(r.text)
+    r = requests.get(f'https://maps.googleapis.com/maps/api/geocode/json?address={p["addressInput"]}&key=AIzaSyBsjbLLe2RaAjIzUe5lxKb7wLFvebnX2gY')
+    # print(r.text)
     rj= json.loads(r.text)
-    print(rj['results'][0]['geometry']['location'])
-    print(rj['results'][0]['geometry']['location']['lat'])
+    # print(rj['results'][0]['geometry']['location'])
+    # print(rj['results'][0]['geometry']['location']['lat'])
 
     newEvent.latitude = rj['results'][0]['geometry']['location']['lat']
     newEvent.longitude = rj['results'][0]['geometry']['location']['lng']
