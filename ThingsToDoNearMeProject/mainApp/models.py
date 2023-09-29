@@ -6,6 +6,7 @@ class Event(models.Model):
 
     title = models.CharField(max_length=200, null=True, blank=True)
     description = models.CharField(max_length=200, null=True, blank=True)
+    url = models.CharField(max_length=200, null=True, blank=True)
     date = models.DateField(null=True, blank=True)
     # Day_of_week = models.CharField(max_length=10)
     address = models.CharField(max_length=200, null=True, blank=True)

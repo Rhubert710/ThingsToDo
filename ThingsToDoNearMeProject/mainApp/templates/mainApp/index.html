@@ -67,7 +67,7 @@
     const infoWindow = new InfoWindow();
 
     // Create the markers.
-    events.forEach(({ latitude, longitude, title, description, address, date }, i) => {
+    events.forEach(({ latitude, longitude, title, description, address, date, url }, i) => {
       // const pin = new PinElement({
       //   glyph: `${i + 1}`,
       // });
@@ -93,6 +93,9 @@
             </div>
             <div class="eventAddress">
               ${address}
+            </div>
+            <div class="eventAddress">
+              <a href="${url}" target="_blank"> Click Here </a>
             </div>
           </div>`);
         infoWindow.open(marker.map, marker);

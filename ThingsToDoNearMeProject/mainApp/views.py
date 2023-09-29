@@ -24,7 +24,7 @@ def getEvents(request):
     
     ## Get Events from OUR DB
     l = list( Event.objects.filter(date__gte = datetime.date.today()).values() ) #Time on db seems to be three hours ahead of local time.
-    print(datetime.date.today()+datetime.timedelta(days=4))
+    # print(datetime.date.today()+datetime.timedelta(days=4))
 
     
     ## Get from seat geek api
@@ -41,6 +41,7 @@ def getEvents(request):
             temp_obj['address'] = o["venue"]["name"]
             temp_obj['latitude'] = o['venue']["location"]["lat"]
             temp_obj['longitude'] = o['venue']['location']['lon']
+            temp_obj['url'] = o['performers'][0]["url"]
             seatGeekJson.append(temp_obj)
 
         # seatGeekJson += list ( data['events'] )
