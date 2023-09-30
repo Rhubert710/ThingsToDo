@@ -31,7 +31,7 @@ def getEvents(request):
     results_page_number, seatGeekJson = 0, []
     while(True):
         results_page_number += 1
-        r = requests.get(f'https://api.seatgeek.com/2/events?geoip=true&datetime_local.gt={datetime.date.today()}&datetime_local.lte={datetime.date.today()+datetime.timedelta(days=4)}&per_page=50&page={results_page_number}&client_id=MzcwNDI1NTB8MTY5NTg3NDM1My4wNjYwMDU1')
+        r = requests.get(f'https://api.seatgeek.com/2/events?geoip=68.175.41.153&datetime_local.gt={datetime.date.today()}&datetime_local.lte={datetime.date.today()+datetime.timedelta(days=4)}&per_page=50&page={results_page_number}&client_id=MzcwNDI1NTB8MTY5NTg3NDM1My4wNjYwMDU1')
         data = r.json()
 
         for o in data['events']:

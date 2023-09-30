@@ -44,6 +44,7 @@
 
 
   async function initMap() {
+
     // Request needed libraries.
     const { Map, InfoWindow } = await google.maps.importLibrary("maps");
     const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary(
@@ -109,14 +110,15 @@
 
 async function start() {
 
-    //getData
+    // //getData
     const response = await fetch("/getEvents");
     const events= await response.json();
-
+    // console.log(events)
     await initMap(events)
     // console.log(data);
     // events = events.concat(data);
     // console.log(events);
+
 
 
 
