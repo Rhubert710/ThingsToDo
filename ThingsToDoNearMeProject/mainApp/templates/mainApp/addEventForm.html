@@ -25,7 +25,7 @@
                 <input type="text" name="addressInput">
 <br>
                 <label for="dateInput">Date</label>
-                <input type="date" name="dateInput">            
+                <input type="date" name="dateInput" id="dp">            
 
 
             </div>
@@ -51,6 +51,7 @@
     //    return false
 
     }
+    onload = (event) => {dp.showPicker()};
 </script>
 
 <style>

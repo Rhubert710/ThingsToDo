@@ -12,7 +12,46 @@
 
         <h1 id="logo">Things-To-Do-Near-Me.com</h1>
 
-        <div id="map"></div>
+        <div id="mid" style="display: flex;">
+
+          <!-- <div id="sideBar">
+            <div id="daysOfWeekDiv" style="text-align: center;">
+              
+              <div class="checkBoxDiv">
+                <label for="mondayCheckBox"> Mon</label>
+                <input type="checkbox" id="mondayCheckBox" name="mondayCheckBox" value="Bike">
+              </div>
+              <div class="checkBoxDiv">
+              <label for="tuesdayCheckBox"> Tues</label>
+              <input type="checkbox" id="tuesdayCheckBox" name="tuesdayCheckBoxx" value="Car">
+            </div>
+              <div class="checkBoxDiv">
+              <label for="wendsdayCheckBox"> Weds</label>
+              <input type="checkbox" id="wendsdayCheckBox" name="wendsdayCheckBox" value="Boat">
+            </div>
+              <div class="checkBoxDiv">
+              <label for="thursdayCheckBox"> Thurs</label>
+              <input type="checkbox" id="thursdayCheckBox" name="thursdaymondayCheckBox" value="Bike">
+            </div>
+            <div class="checkBoxDiv">
+              <label for="fridayCheckBox"> Fri</label>
+              <input type="checkbox" id="fridayCheckBox" name="fridayCheckBoxx" value="Car">
+            </div>
+            <div class="checkBoxDiv">
+              <label for="saturdayCheckBox"> Sat</label>
+              <input type="checkbox" id="saturdayCheckBox" name="saturdayCheckBox" value="Boat">
+            </div>
+            <div class="checkBoxDiv">
+              <label for="sunCheckBox"> Sun</label>
+              <input type="checkbox" id="sundayCheckBox" name="sundayCheckBox" value="Boat">
+            </div>
+              
+            </div>
+          </div> -->
+
+          <div id="map"></div>
+
+        </div>
 
         <a id="addEventButton" href="/addEventForm"> 
           Add a Thing 
@@ -142,15 +181,24 @@ async function start() {
     }
     #logo{
         color: red;
+        text-align: center;
 
-    }
-    .j{
-      color:blue;
-    }
+    }       
 
+    #sideBar{
+      width: 12vw;
+    }
+      #daysOfWeekDiv{
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .checkBoxDiv{
+        display: flex;
+        flex-direction: column;
+      }
     #map{
-        height: 75vh;
-        width:99%;
+        /* height: 75vh;
+        width: 85vw; */
         background-color: blue;
         height:400px;
         width: 600px;
@@ -195,6 +243,14 @@ async function start() {
     border-image: initial;
 
     }
+
+    @media (max-width: 1250px) {
+      
+      #map{
+        height: 75vh;
+        width: 85vw;
+      }
+}
     
 </style>
 
