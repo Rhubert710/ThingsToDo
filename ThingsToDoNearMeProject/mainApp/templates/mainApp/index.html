@@ -51,7 +51,8 @@
           <div id="mapContainer">
 
             <div id="addressInput" style="display: flex;">
-              🌐<input type="text" style="width: 8ch;"><button>Go</button>
+              🌐<input type="text" id="userLocation_input" style="width: 8ch;">
+              <button onclick="updateLocation()" >Go</button>
             </div>
 
             <div id="map"></div>
@@ -89,16 +90,31 @@
 //   ]
 
 
-  async function initMap() {
+
+
+
+
+
+
+
+  // get cookie
+  getCookie = (key )=>((new RegExp((key || '=')+'=(.*?); ','gm')).exec(document.cookie+'; ') ||['',null])[1]
+
+  async function initMap( props = {} ) {
 
     // Request needed libraries.
     const { Map, InfoWindow } = await google.maps.importLibrary("maps");
     const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary(
       "marker",
     );
-
-    const response = await fetch("/getEvents");
+    console.log(props.userLocation_input)
+    const response = await fetch("/getEvents" ,{ method: 'POST' , 
+                                                  body: JSON.stringify({userLocation_inputl: 'k'}), 
+                                                  headers: {"X-CSRFToken":  getCookie('csrftoken')} 
+                                                }
+                                )
     const events= await response.json();
+    console.log(events)
 
     const map = new Map(document.getElementById("map"), {
       zoom: 12,
@@ -121,13 +137,14 @@
       const marker = new AdvancedMarkerElement({
         position:{lat:latitude, lng:longitude},
         map:map,
-        // title: `${i + 1}. ${title}`,
+        title: 'k'//`${i + 1}. ${title}`,
         // content: pin.element,
       });
 
       // Add a click listener for each marker, and set up the info window.
-      marker.addListener("click", ({ domEvent, latLng }) => {
-        const { target } = domEvent;
+      //marker.addListener("mouseenter", ({ domEvent, latLng }) => {  <<<<This is original from docs
+        marker.content.addEventListener("mouseenter", () => {
+        // const { target } = domEvent; <<<<This is original from docs
 
         infoWindow.close();
         infoWindow.setContent(`
@@ -147,7 +164,11 @@
           </div>`);
         infoWindow.open(marker.map, marker);
       });
+
+      marker.content.addEventListener('mouseenter', function(){console.log('mouse enter');});
     });
+
+    
 }
 
 // setTimeout(() => {
@@ -164,10 +185,13 @@ async function start() {
     // console.log(data);
     // events = events.concat(data);
     // console.log(events);
+}
 
+async function updateLocation() {
 
+  userLocation_input = document.querySelector('userLocation_input')
 
-
+  initMap( {'userLocation_input': userLocation_input})
   
 }
 

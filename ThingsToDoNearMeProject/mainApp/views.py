@@ -22,12 +22,21 @@ def index(request):
 
 def getEvents(request):
 
+    if request.method == "POST":
+        print(json.loads(request.body)['userLocation_inputl'])
+        print('l')
     ## Get clients ip for lat , lng:
     client_ip = get_client_ip(request)
     print(client_ip)
     
+    ## Get lat, lon from client ip
+    # rl = requests.get(f'https://api.seatgeek.com/2/events?geoip={client_ip}&range=1mi&per_page=1&client_id=MzcwNDI1NTB8MTY5NTg3NDM1My4wNjYwMDU1')
+
+    # datal = rl.json()
+    # print(datal)
+    # print(datal['meta']['geolocation']['lat'], data['meta']['geolocation']['lon'])
     ## Get Events from OUR DB
-    l = list( Event.objects.filter(date__gte = datetime.date.today()).values() ) #Time on db seems to be three hours ahead of local time.(its UTC)
+    myDbJson = list( Event.objects.filter(date__gte = datetime.date.today()).values() ) #Time on db seems to be three hours ahead of local time.(its UTC)
     # print(datetime.date.today()+datetime.timedelta(days=6))
 
     
@@ -55,9 +64,9 @@ def getEvents(request):
 
 
     #Combine All Results
-    l += seatGeekJson
-    print(len(l))
-    return JsonResponse(list(l), safe=False)
+    myDbJson += seatGeekJson
+    print(len(myDbJson))
+    return JsonResponse(list(myDbJson), safe=False)
 
 def addEventForm(request):
     return render(request, "mainApp/addEventForm.html", { 'pageTitle' : pageTitle})
@@ -80,6 +89,17 @@ def postEvent(request):
     newEvent.save()
     return render(request, "mainApp/index.html")
 
+
+
+
+
+
+
+
+
+
+
+#### variables ####
 pageTitle = 'Things-to-do-near-me!'
 
 def get_client_ip(request):
