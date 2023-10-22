@@ -109,7 +109,7 @@
     );
     console.log(props.userLocation_input)
     const response = await fetch("/getEvents" ,{ method: 'POST' , 
-                                                  body: JSON.stringify({userLocation_inputl: 'k'}), 
+                                                  body: JSON.stringify({ props }), 
                                                   headers: {"X-CSRFToken":  getCookie('csrftoken')} 
                                                 }
                                 )
@@ -159,7 +159,7 @@
               ${address}
             </div>
             <div class="eventAddress">
-              <a href="${url}" target="_blank"> Click Here </a>
+              <a href="${url}" > Click Here </a>
             </div>
           </div>`);
         infoWindow.open(marker.map, marker);

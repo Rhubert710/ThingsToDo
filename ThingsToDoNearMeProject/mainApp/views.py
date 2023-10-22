@@ -20,17 +20,15 @@ def index(request):
 
 
 
+
 def getEvents(request):
 
-    if request.method == "POST":
-        print(json.loads(request.body)['userLocation_inputl'])
-        print('l')
-    ## Get clients ip for lat , lng:
-    client_ip = get_client_ip(request)
-    print(client_ip)
-    
+    lat , lon = get_my_user_Lat_Lon(request)
+    print(lat, lon)
+    if (lat and lon == 0):
+        return JsonResponse( {'status' : 'error' , 'errorMessage': 'this is an errorMessage' }, safe=False)
     ## Get lat, lon from client ip
-    # rl = requests.get(f'https://api.seatgeek.com/2/events?geoip={client_ip}&range=1mi&per_page=1&client_id=MzcwNDI1NTB8MTY5NTg3NDM1My4wNjYwMDU1')
+    # rl = requests.get(f'https://api.seatgeek.com/2/events?geoip={client_ip}&rnage=1mi&per_page=1&client_id=MzcwNDI1NTB8MTY5NTg3NDM1My4wNjYwMDU1')
 
     # datal = rl.json()
     # print(datal)
@@ -102,6 +100,8 @@ def postEvent(request):
 #### variables ####
 pageTitle = 'Things-to-do-near-me!'
 
+
+## FUNC GET CLIENT IP
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
@@ -110,4 +110,51 @@ def get_client_ip(request):
        ip = request.META.get('REMOTE_ADDR')
        print(11)
     return ip
+
+## FUNC GET USER LAT LON
+def get_my_user_Lat_Lon(request):
+
+    requestBody = json.loads(request.body)
+
+    # if lat, lon
+    try:
+
+        lat, lon = requestBody['lattitude'] , requestBody['longitude']
+        return lat, lon
+    
+    except: pass
+
+    # if address
+    try:
+
+        geocode = requests.get(f'https://maps.googleapis.com/maps/api/geocode/json?address={requestBody["addressInput"]}&key=AIzaSyBsjbLLe2RaAjIzUe5lxKb7wLFvebnX2gY')
+        # print(r.text)
+        geocode_json= json.loads(geocode.text)
+        # print(rj['results'][0]['geometry']['location'])
+        # print(rj['results'][0]['geometry']['location']['lat'])
+
+        lat = geocode_json['results'][0]['geometry']['location']['lat']
+        lon = geocode_json['results'][0]['geometry']['location']['lng']
+
+        return lat, lon
+    
+    except: pass
+
+    # else try ip
+    try:
+
+        client_ip = get_client_ip(request)
+        r = requests.get(f'https://api.seatgeek.com/2/events?geoip={client_ip}&datetime_local={datetime.date.today()}&per_page=1&client_id=MzcwNDI1NTB8MTY5NTg3NDM1My4wNjYwMDU1')
+        r_JSON = r.json()
+        print(client_ip)
+        print(r.json)
+        lat = r_JSON['meta']['geolocation']['lat']
+        lon = r_JSON['meta']['geolocation']['lon']
+
+        return lat, lon
+
+    #catch all
+    except:
+        return 0 , 0
+        
 
