@@ -91,14 +91,29 @@
 
 
 
-
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+          }
+      }
+  }
+  return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
 
 
 
 
 
   // get cookie
-  getCookie = (key )=>((new RegExp((key || '=')+'=(.*?); ','gm')).exec(document.cookie+'; ') ||['',null])[1]
+  // getCookie = (key )=>((new RegExp((key || '=')+'=(.*?); ','gm')).exec(document.cookie+'; ') ||['',null])[1]
 
   async function initMap( props = {} ) {
 
@@ -110,11 +125,11 @@
     console.log(props.userLocation_input)
     const response_raw = await fetch("/getEvents" ,{ method: 'POST' , 
                                                   body: JSON.stringify({ props }), 
-                                                  headers: {"X-CSRFToken":  getCookie('csrftoken')} 
+                                                  headers: {"X-CSRFToken": csrftoken} 
                                                 }
                                 )
     const response= await response_raw.json();
-    console.log(response.location.lon)
+    console.log(response)
 
     // if not lat lon returned , launchModal
     if ('errorMessage' in response) {
