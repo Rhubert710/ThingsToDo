@@ -108,23 +108,23 @@
       "marker",
     );
     console.log(props.userLocation_input)
-    const response = await fetch("/getEvents" ,{ method: 'POST' , 
+    const response_raw = await fetch("/getEvents" ,{ method: 'POST' , 
                                                   body: JSON.stringify({ props }), 
                                                   headers: {"X-CSRFToken":  getCookie('csrftoken')} 
                                                 }
                                 )
-    const events= await response.json();
-    console.log(events)
+    const response= await response_raw.json();
+    console.log(response.location.lon)
 
     // if not lat lon returned , launchModal
-    if ('errorMessage' in events) {
-      launchModal(events['errorMessage'])
+    if ('errorMessage' in response) {
+      launchModal(response['errorMessage'])
       return
     }
 
     const map = new Map(document.getElementById("map"), {
       zoom: 12,
-      center: { lat: 40.756248, lng: -73.791809 },
+      center: { lat: response.location.lat, lng: response.location.lon }, //set lat , lon
       mapId: "19674ca3fb6d4029",
       //DEMO_MAP_ID 
     });
@@ -136,7 +136,7 @@
     const infoWindow = new InfoWindow();
 
     // Create the markers.
-    events.forEach(({ latitude, longitude, title, description, address, date, url }, i) => {
+    response.events.forEach(({ latitude, longitude, title, description, address, date, url }, i) => {
       // const pin = new PinElement({
       //   glyph: `${i + 1}`,
       // });

@@ -44,7 +44,7 @@ def getEvents(request):
     results_page_number, seatGeekJson = 0, []
     while(True):
         results_page_number += 1
-        r = requests.get(f'https://api.seatgeek.com/2/events?geoip=68.175.41.153&datetime_local.gt={datetime.date.today()}&datetime_local.lte={datetime.date.today()+datetime.timedelta(days=6)}&per_page=50&page={results_page_number}&client_id=MzcwNDI1NTB8MTY5NTg3NDM1My4wNjYwMDU1')
+        r = requests.get(f'https://api.seatgeek.com/2/events?lat={lat}&lon={lon}&datetime_local.gt={datetime.date.today()}&datetime_local.lte={datetime.date.today()+datetime.timedelta(days=6)}&per_page=50&page={results_page_number}&client_id=MzcwNDI1NTB8MTY5NTg3NDM1My4wNjYwMDU1')
         data = r.json()
 
         for o in data['events']:
@@ -64,9 +64,11 @@ def getEvents(request):
 
 
     #Combine All Results
-    myDbJson += seatGeekJson
-    print(len(myDbJson))
-    return JsonResponse(list(myDbJson), safe=False)
+    response = { 'events' : list(myDbJson + seatGeekJson)}
+    response['location'] = {'lat' : lat , 'lon' : lon}
+
+    print(len(response))
+    return JsonResponse( response , safe=False)
 
 def addEventForm(request):
     return render(request, "mainApp/addEventForm.html", { 'pageTitle' : pageTitle})
