@@ -1,0 +1,47 @@
+<div class="innerModal">
+
+    <p class="modalTitle" style="margin-bottom: 5px;">
+        Find Things to Do
+    </p>
+
+    <p style="font-size: .9em; margin-bottom: .4em;">
+        Search city, town, zip etc.
+    </p>
+
+    <div id="addressInput" style="display: flex;">
+        <input type="text" id="userLocation_input" style="width: 11ch;" onkeydown="if (event.key == 'Enter')updateLocation(this)">
+        <button onclick="updateLocation(this)"> Go </button>
+    </div>
+
+    <p>
+        or <a href="#" id="usePreciseLocationButton"> use you precise location </a>
+    </p>
+
+</div>
+
+
+
+
+
+
+
+<style>
+
+
+    .modalTitle{
+        color: red;
+        font-size:xx-large;
+        font-weight: bold;
+
+    }
+
+    /* #usePreciseLocationButton{
+        border: 1px solid #3c4043;
+        color: #8ab4f8;
+        border-radius: 14px;
+        cursor: pointer;
+        padding-block: 2px;
+        padding-inline: 4px;
+
+    } */
+</style>

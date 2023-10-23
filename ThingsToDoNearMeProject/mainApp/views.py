@@ -4,6 +4,8 @@ from django.http import HttpResponse, JsonResponse
 from mainApp.models import *
 import json, requests , datetime
 
+from django.template.loader import render_to_string
+
 
 def indexDemo(request):
     return HttpResponse("Hello, world. You're at the polls index.")
@@ -24,9 +26,9 @@ def index(request):
 def getEvents(request):
 
     lat , lon = get_my_user_Lat_Lon(request)
-    print(lat, lon)
-    if (lat and lon == 0):
-        return JsonResponse( {'status' : 'error' , 'errorMessage': 'this is an errorMessage' }, safe=False)
+    print(lat , lon)
+    if (lat == 0 and lon == 0 ):
+        return JsonResponse( {'status' : 'error' , 'errorMessage': render_to_string('mainApp/modal_noLocation.html') }, safe=False)
     ## Get lat, lon from client ip
     # rl = requests.get(f'https://api.seatgeek.com/2/events?geoip={client_ip}&rnage=1mi&per_page=1&client_id=MzcwNDI1NTB8MTY5NTg3NDM1My4wNjYwMDU1')
 
@@ -108,7 +110,6 @@ def get_client_ip(request):
        ip = x_forwarded_for.split(',')[0]
     else:
        ip = request.META.get('REMOTE_ADDR')
-       print(11)
     return ip
 
 ## FUNC GET USER LAT LON
@@ -118,7 +119,7 @@ def get_my_user_Lat_Lon(request):
 
     # if lat, lon
     try:
-
+        
         lat, lon = requestBody['lattitude'] , requestBody['longitude']
         return lat, lon
     
@@ -126,9 +127,9 @@ def get_my_user_Lat_Lon(request):
 
     # if address
     try:
-
-        geocode = requests.get(f'https://maps.googleapis.com/maps/api/geocode/json?address={requestBody["addressInput"]}&key=AIzaSyBsjbLLe2RaAjIzUe5lxKb7wLFvebnX2gY')
-        # print(r.text)
+        
+        geocode = requests.get(f'https://maps.googleapis.com/maps/api/geocode/json?address={requestBody["props"]["addressInput"]}&key=AIzaSyBsjbLLe2RaAjIzUe5lxKb7wLFvebnX2gY')
+        # print(geocode.text)
         geocode_json= json.loads(geocode.text)
         # print(rj['results'][0]['geometry']['location'])
         # print(rj['results'][0]['geometry']['location']['lat'])
@@ -142,7 +143,7 @@ def get_my_user_Lat_Lon(request):
 
     # else try ip
     try:
-
+        print(3)
         client_ip = get_client_ip(request)
         r = requests.get(f'https://api.seatgeek.com/2/events?geoip={client_ip}&datetime_local={datetime.date.today()}&per_page=1&client_id=MzcwNDI1NTB8MTY5NTg3NDM1My4wNjYwMDU1')
         r_JSON = r.json()

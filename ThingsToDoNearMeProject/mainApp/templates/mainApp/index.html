@@ -51,8 +51,8 @@
           <div id="mapContainer">
 
             <div id="addressInput" style="display: flex;">
-              🌐<input type="text" id="userLocation_input" style="width: 8ch;">
-              <button onclick="updateLocation()" >Go</button>
+              🌐<input type="text" id="userLocation_input" style="width: 11ch;" onkeydown="if (event.key == 'Enter')updateLocation(this.nextElementSibling)">
+              <button onclick="updateLocation(this)"> Go </button>
             </div>
 
             <div id="map"></div>
@@ -116,6 +116,12 @@
     const events= await response.json();
     console.log(events)
 
+    // if not lat lon returned , launchModal
+    if ('errorMessage' in events) {
+      launchModal(events['errorMessage'])
+      return
+    }
+
     const map = new Map(document.getElementById("map"), {
       zoom: 12,
       center: { lat: 40.756248, lng: -73.791809 },
@@ -164,8 +170,6 @@
           </div>`);
         infoWindow.open(marker.map, marker);
       });
-
-      marker.content.addEventListener('mouseenter', function(){console.log('mouse enter');});
     });
 
     
@@ -187,14 +191,36 @@ async function start() {
     // console.log(events);
 }
 
-async function updateLocation() {
+async function updateLocation(x) {
 
-  userLocation_input = document.querySelector('userLocation_input')
+  userLocation_input = x.previousElementSibling.value
+  console.log(userLocation_input)
+  initMap( {'addressInput': `${userLocation_input}`})
+  
+  
+  if ( document.querySelector('#modal') ){
+    closeModal();}
 
-  initMap( {'userLocation_input': userLocation_input})
   
 }
 
+function launchModal (message) {
+
+  const modal = document.createElement('div');
+
+  modal.id = 'modal';
+  modal.innerHTML = message ;
+
+  document.body.appendChild(modal);
+  
+}
+
+function closeModal() {
+
+  const modal = document.querySelector('#modal')
+  modal.remove();
+  
+}
 
 </script>
 
@@ -228,8 +254,8 @@ async function updateLocation() {
         flex-direction: column;
       }
     #map{
-        /* height: 75vh;
-        width: 85vw; */
+        height: 75vh;
+        width: 85vw;
         background-color: blue;
         height:400px;
         width: 600px;
@@ -275,11 +301,23 @@ async function updateLocation() {
 
     }
 
+    #modal{
+      position: fixed;
+      padding: 1vh;
+
+      width: 28vw; /* 95vw on mobile */
+      background-color: white;
+    }
+
     @media (max-width: 1250px) {
       
       #map{
         height: 75vh;
         width: 85vw;
+      }
+
+      #modal{
+        width: 80vw;
       }
 }
     
