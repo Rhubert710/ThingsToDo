@@ -5,11 +5,13 @@ from mainApp.models import *
 import json, requests , datetime
 
 from django.template.loader import render_to_string
-
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 def indexDemo(request):
     return HttpResponse("Hello, world. You're at the polls index.")
 
+
+@ensure_csrf_cookie
 def index(request):
     context={ 'pageTitle' : pageTitle} 
     # print(request.__dict__)
