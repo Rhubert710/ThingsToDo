@@ -141,7 +141,7 @@ def get_my_user_Lat_Lon(request):
         try:
             lat = geocode_json['results'][0]['geometry']['location']['lat']
             lon = geocode_json['results'][0]['geometry']['location']['lng']
-        except: return 0, 0 , 'mainApp/modal_noLocation.html'
+        except: return 0, 0
 
         return lat, lon
     
