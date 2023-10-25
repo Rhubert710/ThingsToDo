@@ -8,10 +8,10 @@
         Search city, town, zip etc.
     </p>
 
-    <div id="addressInput" style="display: flex;">
-        <input type="text" id="userLocation_input" style="width: 11ch;" onkeydown="if (event.key == 'Enter')updateLocation(this)">
-        <button onclick="updateLocation(this)"> Go </button>
-    </div>
+    <form id="addressInputForm" style="display: flex;">
+        <input type="text" id="userLocation_input" style="width: 11ch;" >
+        <input type="submit" onclick="updateLocation(event, this)" value="Go">
+    </form>
 
     <p>
         or <a href="#" id="usePreciseLocationButton"> use you precise location </a>

@@ -14,48 +14,50 @@
 
         <div id="mid" style="display: flex;">
 
-          <!-- <div id="sideBar">
-            <div id="daysOfWeekDiv" style="text-align: center;">
-              
-              <div class="checkBoxDiv">
-                <label for="mondayCheckBox"> Mon</label>
-                <input type="checkbox" id="mondayCheckBox" name="mondayCheckBox" value="Bike">
-              </div>
-              <div class="checkBoxDiv">
-              <label for="tuesdayCheckBox"> Tues</label>
-              <input type="checkbox" id="tuesdayCheckBox" name="tuesdayCheckBoxx" value="Car">
-            </div>
-              <div class="checkBoxDiv">
-              <label for="wendsdayCheckBox"> Weds</label>
-              <input type="checkbox" id="wendsdayCheckBox" name="wendsdayCheckBox" value="Boat">
-            </div>
-              <div class="checkBoxDiv">
-              <label for="thursdayCheckBox"> Thurs</label>
-              <input type="checkbox" id="thursdayCheckBox" name="thursdaymondayCheckBox" value="Bike">
-            </div>
-            <div class="checkBoxDiv">
-              <label for="fridayCheckBox"> Fri</label>
-              <input type="checkbox" id="fridayCheckBox" name="fridayCheckBoxx" value="Car">
-            </div>
-            <div class="checkBoxDiv">
-              <label for="saturdayCheckBox"> Sat</label>
-              <input type="checkbox" id="saturdayCheckBox" name="saturdayCheckBox" value="Boat">
-            </div>
-            <div class="checkBoxDiv">
-              <label for="sunCheckBox"> Sun</label>
-              <input type="checkbox" id="sundayCheckBox" name="sundayCheckBox" value="Boat">
-            </div>
-              
-            </div>
-          </div> -->
+          
           <div id="mapContainer">
 
-            <div id="addressInput" style="display: flex;">
-              🌐<input type="text" id="userLocation_input" style="width: 11ch;" onkeydown="if (event.key == 'Enter')updateLocation(this.nextElementSibling)">
-              <button onclick="updateLocation(this)"> Go </button>
-            </div>
+          <form id="addressInputForm" style="display: flex;">
+            🌐<input type="text" id="userLocation_input" style="width: 11ch;" >
+              <input type="submit" onclick="updateLocation(event, this)" value="Go">
+          </form>
 
             <div id="map"></div>
+
+            <div id="sideBar">
+              <div id="daysOfWeekDiv" style="text-align: center;">
+                
+                <div class="checkBoxDiv">
+                  <label for="mondayCheckBox"> Mon</label>
+                  <input type="checkbox" id="mondayCheckBox" name="mondayCheckBox" value="Bike">
+                </div>
+                <div class="checkBoxDiv">
+                <label for="tuesdayCheckBox"> Tues</label>
+                <input type="checkbox" id="tuesdayCheckBox" name="tuesdayCheckBoxx" value="Car">
+              </div>
+                <div class="checkBoxDiv">
+                <label for="wendsdayCheckBox"> Weds</label>
+                <input type="checkbox" id="wendsdayCheckBox" name="wendsdayCheckBox" value="Boat">
+              </div>
+                <div class="checkBoxDiv">
+                <label for="thursdayCheckBox"> Thurs</label>
+                <input type="checkbox" id="thursdayCheckBox" name="thursdaymondayCheckBox" value="Bike">
+              </div>
+              <div class="checkBoxDiv">
+                <label for="fridayCheckBox"> Fri</label>
+                <input type="checkbox" id="fridayCheckBox" name="fridayCheckBoxx" value="Car">
+              </div>
+              <div class="checkBoxDiv">
+                <label for="saturdayCheckBox"> Sat</label>
+                <input type="checkbox" id="saturdayCheckBox" name="saturdayCheckBox" value="Boat">
+              </div>
+              <div class="checkBoxDiv">
+                <label for="sunCheckBox"> Sun</label>
+                <input type="checkbox" id="sundayCheckBox" name="sundayCheckBox" value="Boat">
+              </div>
+                
+              </div>
+            </div>
 
           </div>
 
@@ -206,17 +208,18 @@ async function start() {
     // console.log(events);
 }
 
-async function updateLocation(x) {
+async function updateLocation(e, x) {
+
+  e.preventDefault();
 
   userLocation_input = x.previousElementSibling.value
   console.log(userLocation_input)
   initMap( {'addressInput': `${userLocation_input}`})
-  
+
   
   if ( document.querySelector('#modal') ){
     closeModal();}
 
-  
 }
 
 function launchModal (message) {
@@ -262,11 +265,11 @@ function closeModal() {
     }
       #daysOfWeekDiv{
         display: flex;
-        flex-wrap: wrap;
+        /* flex-wrap: wrap; */
       }
       .checkBoxDiv{
         display: flex;
-        flex-direction: column;
+        /* flex-direction: column; */
       }
     #map{
         height: 75vh;

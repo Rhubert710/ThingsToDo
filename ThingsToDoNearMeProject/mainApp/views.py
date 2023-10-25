@@ -135,11 +135,13 @@ def get_my_user_Lat_Lon(request):
         geocode = requests.get(f'https://maps.googleapis.com/maps/api/geocode/json?address={requestBody["props"]["addressInput"]}&key=AIzaSyBsjbLLe2RaAjIzUe5lxKb7wLFvebnX2gY')
         # print(geocode.text)
         geocode_json= json.loads(geocode.text)
+        print(geocode.text)
         # print(rj['results'][0]['geometry']['location'])
         # print(rj['results'][0]['geometry']['location']['lat'])
-
-        lat = geocode_json['results'][0]['geometry']['location']['lat']
-        lon = geocode_json['results'][0]['geometry']['location']['lng']
+        try:
+            lat = geocode_json['results'][0]['geometry']['location']['lat']
+            lon = geocode_json['results'][0]['geometry']['location']['lng']
+        except: return 0, 0 , 'mainApp/modal_noLocation.html'
 
         return lat, lon
     
