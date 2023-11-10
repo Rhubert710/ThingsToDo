@@ -1,0 +1,63 @@
+<div class="innerModal">
+
+    <p class="modalTitle" style="margin-bottom: 25px;">
+        {{ title }}
+    </p>
+
+    <p style="font-size: .9em; margin-bottom: .4em;">
+        {{ subTitle }}
+    </p>
+
+    {% if addressBar == True %}
+        {% include 'mainApp/address_search_bar.html' %}
+    {% endif %}
+
+
+    {% if footer == True %}
+        <p>still havng problems?  message us ✉️</p>
+    {% endif %}
+
+</div>
+
+
+
+
+
+
+
+<style>
+
+    #modal{
+      position: fixed;
+      padding: 1vh;
+
+      width: 28vw; /* 95vw on mobile */
+      background-color: white;
+      border: 1px solid black;
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;    }
+
+    .modalTitle{
+        color: red;
+        font-size:xx-large;
+        font-weight: bold;
+
+    }
+
+    /* #usePreciseLocationButton{
+        border: 1px solid #3c4043;
+        color: #8ab4f8;
+        border-radius: 14px;
+        cursor: pointer;
+        padding-block: 2px;
+        padding-inline: 4px;
+
+    } */
+
+    @media (max-width: 1250px) {
+      
+
+      #modal{
+        width: 85vw;
+      }
+}
+</style>

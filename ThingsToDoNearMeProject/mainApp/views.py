@@ -27,10 +27,10 @@ def index(request):
 
 def getEvents(request):
 
-    lat , lon = get_my_user_Lat_Lon(request)
-    print(lat , lon)
-    if (lat == 0 and lon == 0 ):
-        return JsonResponse( {'status' : 'error' , 'errorMessage': render_to_string('mainApp/modal_noLocation.html') }, safe=False)
+    lat , lon, message = get_my_user_Lat_Lon(request)
+    # print(lat , lon, message)
+    if (lat == 0 and lon == 0):
+        return JsonResponse( {'status' : 'error' , 'errorMessage': render_to_string('mainApp/modal.html', context=message) }, safe=False)
     ## Get lat, lon from client ip
     # rl = requests.get(f'https://api.seatgeek.com/2/events?geoip={client_ip}&rnage=1mi&per_page=1&client_id=MzcwNDI1NTB8MTY5NTg3NDM1My4wNjYwMDU1')
 
@@ -125,7 +125,7 @@ def get_my_user_Lat_Lon(request):
     try:
         
         lat, lon = requestBody['lattitude'] , requestBody['longitude']
-        return lat, lon
+        return lat, lon, {}
     
     except: pass
 
@@ -141,27 +141,27 @@ def get_my_user_Lat_Lon(request):
         try:
             lat = geocode_json['results'][0]['geometry']['location']['lat']
             lon = geocode_json['results'][0]['geometry']['location']['lng']
-        except: return 0, 0
+        except: return 0, 0, {"title":"Couldn't find address" , "subTitle": "check spelling and try again", "addressBar":True, "footer": True }
 
-        return lat, lon
+        return lat, lon, {}
     
-    except: pass
+    # except: pass
 
     # else try ip
-    try:
-        print(3)
-        client_ip = get_client_ip(request)
-        r = requests.get(f'https://api.seatgeek.com/2/events?geoip={client_ip}&datetime_local={datetime.date.today()}&per_page=1&client_id=MzcwNDI1NTB8MTY5NTg3NDM1My4wNjYwMDU1')
-        r_JSON = r.json()
-        print(client_ip)
-        print(r.json)
-        lat = r_JSON['meta']['geolocation']['lat']
-        lon = r_JSON['meta']['geolocation']['lon']
+    # try:
+    #     print(3)
+        # client_ip = get_client_ip(request)
+        # r = requests.get(f'https://api.seatgeek.com/2/events?geoip={client_ip}&datetime_local={datetime.date.today()}&per_page=1&client_id=MzcwNDI1NTB8MTY5NTg3NDM1My4wNjYwMDU1')
+        # r_JSON = r.json()
+        # print(client_ip)
+        # print(r.json)
+        # lat = r_JSON['meta']['geolocation']['lat']
+        # lon = r_JSON['meta']['geolocation']['lon']
 
-        return lat, lon
+        # return lat, lon
 
     #catch all
     except:
-        return 0 , 0
+        return 0 , 0 , {"title":"Find Things to do" , "subTitle": "Search city, town, zip etc.", "addressBar":True, "footer": False }
         
 
