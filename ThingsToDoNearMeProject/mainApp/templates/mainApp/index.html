@@ -22,7 +22,7 @@
               <input type="submit" onclick="updateLocation(event, this)" value="Go" class="addressSearch_submitButton">
           </form>
 
-            <div id="map"></div>
+            <div id="map"> <!-- <img src="https://rhubert.pythonanywhere.com/static/background_img.png" style="object-fit: contain;"> --> </div>
 
             <div id="sideBar">
               <div id="daysOfWeekDiv" style="text-align: center;">
@@ -143,6 +143,7 @@ const csrftoken = getCookie('csrftoken');
     // if no lat lon returned , launchModal
     if ('errorMessage' in response) {
       launchModal(response['errorMessage'])
+      stopLoadingSpinner();
       return
     }
 
@@ -241,7 +242,7 @@ userLocation_input = x.previousElementSibling.value;
 //check local storage for latLon value
 prev_locations = JSON.parse( localStorage.getItem('prev_locations') )
 
-if ( userLocation_input in prev_locations ){
+if ( prev_locations && userLocation_input in prev_locations ){
 // console.log('1')
   let {lat, lon} = prev_locations[userLocation_input]
   initMap( {lat, lon})
@@ -266,6 +267,8 @@ function launchModal (message) {
   modal.innerHTML = message ;
 
   document.body.appendChild(modal);
+
+  console.log(message)
   
 }
 
@@ -360,6 +363,7 @@ function stopLoadingSpinner(params) {
         display: flex;
         align-items: center;
         justify-content: center;
+        overflow: hidden;
     }
 
     .infoWindow{
