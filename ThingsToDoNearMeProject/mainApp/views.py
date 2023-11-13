@@ -28,7 +28,7 @@ def index(request):
 def getEvents(request):
 
     lat , lon, message = get_my_user_Lat_Lon(request)
-    print(lat , lon, message)
+    # print(lat , lon, message)
     if (lat == 0 and lon == 0):
         return JsonResponse( {'status' : 'error' , 'errorMessage': render_to_string('mainApp/modal.html', context=message) }, safe=False)
     ## Get lat, lon from client ip
@@ -70,7 +70,7 @@ def getEvents(request):
     response['location'] = {'lat' : lat , 'lon' : lon}
     response['message'] = message
 
-    print(len(response))
+    # print(len(response))
     return JsonResponse( response , safe=False)
 
 def addEventForm(request):
@@ -121,7 +121,7 @@ def get_client_ip(request):
 def get_my_user_Lat_Lon(request):
 
     requestBody = json.loads(request.body)
-    print(requestBody)
+    # print(requestBody)
     # if lat, lon
     try:
         

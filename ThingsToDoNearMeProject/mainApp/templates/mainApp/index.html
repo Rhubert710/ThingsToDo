@@ -14,8 +14,6 @@
         <h1 id="logo">Things-To-Do-Near-Me.com</h1>
 
         <div id="mid" style="display: flex;">
-          <div class="lds-dual-ring "></div>
-
           
           <div id="mapContainer">
 
@@ -121,6 +119,13 @@ const csrftoken = getCookie('csrftoken');
 
   async function initMap( props = {} ) {
 
+    //disable submit buttons while awaitig
+    document.querySelectorAll('.addressSearch_submitButton').forEach( element => element.disabled = true );
+
+    //loading spinner
+    startLoadingSpinner();
+
+
     // Request needed libraries.
     const { Map, InfoWindow } = await google.maps.importLibrary("maps");
     const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary(
@@ -135,7 +140,7 @@ const csrftoken = getCookie('csrftoken');
     const response= await response_raw.json();
     console.log(response)
 
-    // if not lat lon returned , launchModal
+    // if no lat lon returned , launchModal
     if ('errorMessage' in response) {
       launchModal(response['errorMessage'])
       return
@@ -197,7 +202,10 @@ const csrftoken = getCookie('csrftoken');
   //set local storage current lat/lon nd update prev_locatons obj
   set_local_storge(response);
 
-  //re-enable sumbimt button
+  //stop spinner
+  stopLoadingSpinner();
+
+  //re-enable sumbimt buttons
   document.querySelectorAll('.addressSearch_submitButton').forEach( element => element.disabled = false );
 
 }
@@ -227,14 +235,23 @@ async function updateLocation(e, x) {
 
 //e.preventDefault();
 // x.disabled = true;
-//disable button while awaitig
-document.querySelectorAll('.addressSearch_submitButton').forEach( element => element.disabled = true );
-
 
 userLocation_input = x.previousElementSibling.value;
 
-initMap( {'addressInput': `${userLocation_input}`})
+//check local storage for latLon value
+prev_locations = JSON.parse( localStorage.getItem('prev_locations') )
 
+if ( userLocation_input in prev_locations ){
+// console.log('1')
+  let {lat, lon} = prev_locations[userLocation_input]
+  initMap( {lat, lon})
+
+}else{
+  initMap( {'addressInput': `${userLocation_input}`})
+  // console.log('2')
+}
+
+// console.log('4')
 if ( document.querySelector('#modal') ){
   closeModal();}
 
@@ -269,7 +286,7 @@ function set_local_storge(response) {
     {
       new_location = response.message.addressInput;
       prev_locations = JSON.parse( localStorage.getItem('prev_locations') )
-      console.log(new_location)
+      // console.log(new_location)
       if (prev_locations == null) prev_locations = {} ;
 
       if ( !( new_location in prev_locations)){
@@ -278,6 +295,27 @@ function set_local_storge(response) {
       }
     }
   }
+
+
+function startLoadingSpinner() {
+  
+  loading_div = document.createElement('div')
+  
+  loading_div.id = 'loading_div'
+  loading_div.innerHTML=(`
+    <div class="loading-text"> Finding Things Near you.... </div>
+    <div class="loading-spinner"></div>
+    `)
+
+  document.getElementById('map').appendChild( loading_div )
+}
+
+function stopLoadingSpinner(params) {
+  
+  try{
+    document.getElementById('loading_div').remove();
+  }catch {console.log()}
+}
 
 </script>
 
@@ -293,9 +331,12 @@ function set_local_storge(response) {
         align-items: center;
         justify-content: center;
     }
+
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap');
     #logo{
-        color: red;
+        color: #ea0909;
         text-align: center;
+        font-family: 'Noto Sans TC', sans-serif;
 
     }       
 
@@ -313,9 +354,12 @@ function set_local_storge(response) {
     #map{
         height: 75vh;
         width: 85vw;
-        background-color: blue;
-        height:400px;
-        width: 600px;
+        /* background-color: blue; */
+        /* height:400px; */
+        /* width: 600px; */
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .infoWindow{
@@ -358,10 +402,64 @@ function set_local_storge(response) {
 
     }
     
+#loading_div{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.loading-text {
+  font-weight: bolder;
+  /* text-align: center; */
+  animation: zoom-in-zoom-out 1s ease infinite;
+}
+
+@keyframes zoom-in-zoom-out {
+  0% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.5, 1.5);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+.loading-spinner {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+.loading-spinner:after {
+  content: " ";
+  display: block;
+  width: 34px;
+  height: 34px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 8px solid #da3732;
+  border-color: #da3732 transparent #da3732 transparent;
+  animation: loading-spinner 1.2s linear infinite;
+}
+@keyframes loading-spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+
 
 
     @media (max-width: 1250px) {
       
+      #logo{
+        font-size: 28px;
+      }
+
       #map{
         height: 75vh;
         width: 85vw;
