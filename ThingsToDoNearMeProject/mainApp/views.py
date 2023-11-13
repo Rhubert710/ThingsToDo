@@ -28,7 +28,7 @@ def index(request):
 def getEvents(request):
 
     lat , lon, message = get_my_user_Lat_Lon(request)
-    # print(lat , lon, message)
+    print(lat , lon, message)
     if (lat == 0 and lon == 0):
         return JsonResponse( {'status' : 'error' , 'errorMessage': render_to_string('mainApp/modal.html', context=message) }, safe=False)
     ## Get lat, lon from client ip
@@ -68,6 +68,7 @@ def getEvents(request):
     #Combine All Results
     response = { 'events' : list(myDbJson + seatGeekJson)}
     response['location'] = {'lat' : lat , 'lon' : lon}
+    response['message'] = message
 
     print(len(response))
     return JsonResponse( response , safe=False)
@@ -120,11 +121,11 @@ def get_client_ip(request):
 def get_my_user_Lat_Lon(request):
 
     requestBody = json.loads(request.body)
-
+    print(requestBody)
     # if lat, lon
     try:
         
-        lat, lon = requestBody['lattitude'] , requestBody['longitude']
+        lat, lon = requestBody['props']['lat'] , requestBody['props']['lon']
         return lat, lon, {}
     
     except: pass
@@ -135,7 +136,7 @@ def get_my_user_Lat_Lon(request):
         geocode = requests.get(f'https://maps.googleapis.com/maps/api/geocode/json?address={requestBody["props"]["addressInput"]}&key=AIzaSyBsjbLLe2RaAjIzUe5lxKb7wLFvebnX2gY')
         # print(geocode.text)
         geocode_json= json.loads(geocode.text)
-        print(geocode.text)
+        # print(geocode.text)
         # print(rj['results'][0]['geometry']['location'])
         # print(rj['results'][0]['geometry']['location']['lat'])
         try:
@@ -143,7 +144,7 @@ def get_my_user_Lat_Lon(request):
             lon = geocode_json['results'][0]['geometry']['location']['lng']
         except: return 0, 0, {"title":"Couldn't find address" , "subTitle": "check spelling and try again", "addressBar":True, "footer": True }
 
-        return lat, lon, {}
+        return lat, lon, {"addressInput":requestBody["props"]["addressInput"]}
     
     # except: pass
 

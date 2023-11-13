@@ -19,9 +19,9 @@
           
           <div id="mapContainer">
 
-          <form id="addressInputForm" style="display: flex;">
+          <form id="addressInputForm" style="display: flex;" action="#">
             🌐<input type="text" id="userLocation_input" style="width: 11ch;" >
-              <input type="submit" onclick="updateLocation(event, this)" value="Go">
+              <input type="submit" onclick="updateLocation(event, this)" value="Go" class="addressSearch_submitButton">
           </form>
 
             <div id="map"></div>
@@ -94,8 +94,8 @@
 //   ]
 
 
+function getCookie(name) { //from django docs for fetch = Post
 
-function getCookie(name) {
   let cookieValue = null;
   if (document.cookie && document.cookie !== '') {
       const cookies = document.cookie.split(';');
@@ -126,7 +126,7 @@ const csrftoken = getCookie('csrftoken');
     const { AdvancedMarkerElement, PinElement } = await google.maps.importLibrary(
       "marker",
     );
-    console.log(props.userLocation_input)
+    
     const response_raw = await fetch("/getEvents" ,{ method: 'POST' , 
                                                   body: JSON.stringify({ props }), 
                                                   headers: {"X-CSRFToken": csrftoken} 
@@ -168,34 +168,44 @@ const csrftoken = getCookie('csrftoken');
 
       // Add a click listener for each marker, and set up the info window.
       //marker.addListener("mouseenter", ({ domEvent, latLng }) => {  <<<<This is original from docs
-        marker.content.addEventListener("mouseenter", () => {
-        // const { target } = domEvent; <<<<This is original from docs
+        ['mouseenter', 'click'].forEach( evt => {
+          marker.content.addEventListener( evt , () => {
+          // const { target } = domEvent; <<<<This is original from docs
 
-        infoWindow.close();
-        infoWindow.setContent(`
-          <div class="infoWindow">
-            <div class="eventAddress">
-              ${date}
-            </div>
-            <div class="eventDescription">
-              ${title}
-            </div>
-            <div class="eventAddress">
-              ${address}
-            </div>
-            <div class="eventAddress">
-              <a href="${url}" > Click Here </a>
-            </div>
-          </div>`);
-        infoWindow.open(marker.map, marker);
-      });
+          infoWindow.close();
+          infoWindow.setContent(`
+            <div class="infoWindow">
+              <div class="eventAddress">
+                ${date}
+              </div>
+              <div class="eventDescription">
+                ${title}
+              </div>
+              <div class="eventAddress">
+                ${address}
+              </div>
+              <div class="eventAddress">
+                <a href="${url}" > Click Here </a>
+              </div>
+            </div>`);
+          infoWindow.open(marker.map, marker);
+        }, false);
+      })
     });
 
     
+  //set local storage current lat/lon nd update prev_locatons obj
+  set_local_storge(response);
+
+  //re-enable sumbimt button
+  document.querySelectorAll('.addressSearch_submitButton').forEach( element => element.disabled = false );
+
 }
 
 // setTimeout(() => {
-  initMap();
+  const current_latLon = JSON.parse( localStorage.getItem('current_latLon') )
+  console.log(current_latLon)
+  initMap(current_latLon);
 // }, 1000);
 
 async function start() {
@@ -210,17 +220,24 @@ async function start() {
     // console.log(events);
 }
 
+
+
+
 async function updateLocation(e, x) {
 
-  e.preventDefault();
+//e.preventDefault();
+// x.disabled = true;
+//disable button while awaitig
+document.querySelectorAll('.addressSearch_submitButton').forEach( element => element.disabled = true );
 
-  userLocation_input = x.previousElementSibling.value
-  console.log(userLocation_input)
-  initMap( {'addressInput': `${userLocation_input}`})
 
-  
-  if ( document.querySelector('#modal') ){
-    closeModal();}
+userLocation_input = x.previousElementSibling.value;
+
+initMap( {'addressInput': `${userLocation_input}`})
+
+if ( document.querySelector('#modal') ){
+  closeModal();}
+
 
 }
 
@@ -241,6 +258,26 @@ function closeModal() {
   modal.remove();
   
 }
+
+function set_local_storge(response) {
+    
+  
+    localStorage.setItem('current_latLon' , JSON.stringify({lat:response.location.lat , lon:response.location.lon}) )
+
+
+    if (response.message.addressInput)
+    {
+      new_location = response.message.addressInput;
+      prev_locations = JSON.parse( localStorage.getItem('prev_locations') )
+      console.log(new_location)
+      if (prev_locations == null) prev_locations = {} ;
+
+      if ( !( new_location in prev_locations)){
+        prev_locations[new_location] = { lat:response.location.lat , lon:response.location.lon }
+        localStorage.setItem('prev_locations' , JSON.stringify(prev_locations))
+      }
+    }
+  }
 
 </script>
 
@@ -337,3 +374,4 @@ function closeModal() {
     
 </style>
 
+<!-- <script src="https://rhubert.pythonanywhere.com/static/index.js"></script> -->
