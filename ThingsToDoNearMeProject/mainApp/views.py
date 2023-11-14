@@ -29,50 +29,37 @@ def getEvents(request):
 
     lat , lon, message = get_my_user_Lat_Lon(request)
     # print(lat , lon, message)
+
+    #throws error if location cant be found
     if (lat == 0 and lon == 0):
         return JsonResponse( {'status' : 'error' , 'errorMessage': render_to_string('mainApp/modal.html', context=message) }, safe=False)
+    
     ## Get lat, lon from client ip
     # rl = requests.get(f'https://api.seatgeek.com/2/events?geoip={client_ip}&rnage=1mi&per_page=1&client_id=MzcwNDI1NTB8MTY5NTg3NDM1My4wNjYwMDU1')
 
     # datal = rl.json()
     # print(datal)
     # print(datal['meta']['geolocation']['lat'], data['meta']['geolocation']['lon'])
+
     ## Get Events from OUR DB
     myDbJson = list( Event.objects.filter(date__gte = datetime.date.today()).values() ) #Time on db seems to be three hours ahead of local time.(its UTC)
     # print(datetime.date.today()+datetime.timedelta(days=6))
 
     
     ## Get from seat geek api
-    results_page_number, seatGeekJson = 0, []
-    while(True):
-        results_page_number += 1
-        r = requests.get(f'https://api.seatgeek.com/2/events?lat={lat}&lon={lon}&datetime_local.gt={datetime.date.today()}&datetime_local.lte={datetime.date.today()+datetime.timedelta(days=6)}&per_page=50&page={results_page_number}&client_id=MzcwNDI1NTB8MTY5NTg3NDM1My4wNjYwMDU1')
-        data = r.json()
-
-        for o in data['events']:
-            temp_obj = {}
-            temp_obj['title'] = ''.join(o["title"].split('-')[:-1]) if len(o["title"].split('-')) > 2 else o["title"].split('-')[0]
-            temp_obj['date'] = o["datetime_local"][:10]
-            temp_obj['address'] = o["venue"]["name"]
-            temp_obj['latitude'] = o['venue']["location"]["lat"]
-            temp_obj['longitude'] = o['venue']['location']['lon']
-            temp_obj['url'] = o['performers'][0]["url"]
-            seatGeekJson.append(temp_obj)
-
-        # seatGeekJson += list ( data['events'] )
-        if len(data['events']) == 0:
-            break
-    # print(seatGeekJson)
+    seatGeekList = get_seatGeek_list(lat, lon)
+    ticketMasterDiscoveryList = get_ticketMasterDiscovery_list(lat, lon)
 
 
     #Combine All Results
-    response = { 'events' : list(myDbJson + seatGeekJson)}
+    response = { 'events' : list(myDbJson + seatGeekList + ticketMasterDiscoveryList)}
     response['location'] = {'lat' : lat , 'lon' : lon}
     response['message'] = message
 
     # print(len(response))
     return JsonResponse( response , safe=False)
 
+## /addEventForm/ ##
 def addEventForm(request):
     return render(request, "mainApp/addEventForm.html", { 'pageTitle' : pageTitle})
 
@@ -116,6 +103,10 @@ def get_client_ip(request):
     else:
        ip = request.META.get('REMOTE_ADDR')
     return ip
+
+
+
+
 
 ## FUNC GET USER LAT LON
 def get_my_user_Lat_Lon(request):
@@ -166,3 +157,59 @@ def get_my_user_Lat_Lon(request):
         return 0 , 0 , {"title":"Find Things to do" , "subTitle": "Search city, town, zip etc.", "addressBar":True, "footer": False }
         
 
+## APIs ##
+
+# SeatGeek
+def get_seatGeek_list(lat, lon):
+
+    results_page_number, seatGeekList = 0, []
+
+    while(True):
+        results_page_number += 1
+        r = requests.get(f'https://api.seatgeek.com/2/events?lat={lat}&lon={lon}&datetime_local.gt={datetime.date.today()}&datetime_local.lte={datetime.date.today()+datetime.timedelta(days=6)}&per_page=50&page={results_page_number}&client_id=MzcwNDI1NTB8MTY5NTg3NDM1My4wNjYwMDU1')
+        data = r.json()
+
+        for o in data['events']:
+            temp_obj = {}
+            temp_obj['title'] = ''.join(o["title"].split('-')[:-1]) if len(o["title"].split('-')) > 2 else o["title"].split('-')[0]
+            temp_obj['date'] = o["datetime_local"][:10]
+            temp_obj['address'] = o["venue"]["name"]
+            temp_obj['latitude'] = o['venue']["location"]["lat"]
+            temp_obj['longitude'] = o['venue']['location']['lon']
+            temp_obj['url'] = o['performers'][0]["url"]
+            seatGeekList.append(temp_obj)
+            # print(type(temp_obj['latitude']),temp_obj['longitude'])
+
+        if len(data['events']) == 0:
+            break
+    # print(seatGeekList)
+    return( seatGeekList )
+
+# TicketMaster Discovery
+def get_ticketMasterDiscovery_list(lat, lon):
+
+    results_page_number, data_list = 0, []
+
+    while(True):
+        r = requests.get(f'https://app.ticketmaster.com/discovery/v2/events.json?apikey=YJLOMi9Nx8ze3SqTew85sb32Wk87AWR3&latlong=40.7561988,-73.7920859&size=199&startDateTime={datetime.date.today()}T00:00:00Z&endDateTime={datetime.date.today()+datetime.timedelta(days=6)}T00:00:00Z&radius=50&page={results_page_number}')
+        data = r.json()
+
+        for o in data['_embedded']['events']:
+            temp_obj = {}
+            temp_obj['title'] = o['name']
+            temp_obj['date'] = o['dates']['start']['localDate']
+            temp_obj['address'] = o['_embedded']['venues'][0]['name']
+            temp_obj['latitude'] = float (o['_embedded']['venues'][0]['location']['latitude'])
+            temp_obj['longitude'] = float (o['_embedded']['venues'][0]['location']['longitude'])
+            temp_obj['url'] = o['url']
+            data_list.append(temp_obj)
+            # print(type(temp_obj['latitude']),temp_obj['longitude'])
+
+        print(data['page']['number'] , data['page']['totalPages'])
+        if data['page']['number'] == data['page']['totalPages']-1: #keep an eye on! -last page is always empty today****
+            break
+
+        results_page_number += 1
+        # print(results_page_number)
+    print(len(data_list))
+    return data_list

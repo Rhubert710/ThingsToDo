@@ -22,7 +22,7 @@
               <input type="submit" onclick="updateLocation(event, this)" value="Go" class="addressSearch_submitButton">
           </form>
 
-            <div id="map"> <!-- <img src="https://rhubert.pythonanywhere.com/static/background_img.png" style="object-fit: contain;"> --> </div>
+            <div id="map"></div>
 
             <div id="sideBar">
               <div id="daysOfWeekDiv" style="text-align: center;">
@@ -191,7 +191,7 @@ const csrftoken = getCookie('csrftoken');
                 ${address}
               </div>
               <div class="eventAddress">
-                <a href="${url}" > Click Here </a>
+                <a href="${url}" target="_blank" rel="noopener noreferrer" > Click Here </a>
               </div>
             </div>`);
           infoWindow.open(marker.map, marker);
@@ -261,6 +261,14 @@ if ( document.querySelector('#modal') ){
 
 function launchModal (message) {
 
+  startLoadingSpinner();
+
+  //set background img behind modal
+  document.getElementById('map').innerHTML = '<img id="backgroundMap_img" src="https://rhubert.pythonanywhere.com/static/background_img.png" >'
+  //wait for img o load before launching modal
+  document.getElementById('backgroundMap_img').onload = () =>{
+
+  //create modal
   const modal = document.createElement('div');
 
   modal.id = 'modal';
@@ -268,8 +276,8 @@ function launchModal (message) {
 
   document.body.appendChild(modal);
 
-  console.log(message)
-  
+  // console.log(message)
+  }
 }
 
 function closeModal() {
@@ -302,15 +310,22 @@ function set_local_storge(response) {
 
 function startLoadingSpinner() {
   
-  loading_div = document.createElement('div')
+  // loading_div = document.createElement('div')
   
-  loading_div.id = 'loading_div'
-  loading_div.innerHTML=(`
-    <div class="loading-text"> Finding Things Near you.... </div>
-    <div class="loading-spinner"></div>
-    `)
+  // loading_div.id = 'loading_div'
+  // loading_div.innerHTML=(`
+  //   <div class="loading-text"> Finding Things Near you.... </div>
+  //   <div class="loading-spinner"></div>
+  //   `)
 
-  document.getElementById('map').appendChild( loading_div )
+  // document.getElementById('map').appendChild( loading_div )
+ document.getElementById('map').innerHTML =  `
+  <div id="loading_div" >
+     <div class="loading-text"> Finding Things Near you.... </div>
+     <div class="loading-spinner"></div>
+  </div>
+ `
+
 }
 
 function stopLoadingSpinner(params) {
@@ -406,6 +421,12 @@ function stopLoadingSpinner(params) {
 
     }
     
+  #backgroundMap_img{
+    object-fit: contain;
+    filter: blur(1px);
+    -webkit-filter: blur(1px);
+
+  }
 #loading_div{
   display: flex;
   flex-direction: column;
