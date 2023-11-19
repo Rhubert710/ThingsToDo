@@ -236,6 +236,7 @@ async function updateLocation(e, x) {
 
 //e.preventDefault();
 // x.disabled = true;
+x.previousElementSibling.blur(); // added to disappear onscreen keyboard after submit on mobile devices
 
 userLocation_input = x.previousElementSibling.value;
 
