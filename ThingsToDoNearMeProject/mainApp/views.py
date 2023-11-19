@@ -204,6 +204,8 @@ def get_ticketMasterDiscovery_list(lat, lon):
             temp_obj['url'] = o['url']
             data_list.append(temp_obj)
             # print(type(temp_obj['latitude']),temp_obj['longitude'])
+            if (o['name'] == 'FOOD'):
+                print(o)
 
         print(data['page']['number'] , data['page']['totalPages'])
         if data['page']['number'] == data['page']['totalPages']-1: #keep an eye on! -last page is always empty today****
