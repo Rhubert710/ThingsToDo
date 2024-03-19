@@ -1,10 +1,10 @@
 <div class="innerModal">
 
-    <p class="modalTitle" style="margin-bottom: 25px;">
+    <p class="modalTitle">
         {{ title }}
     </p>
 
-    <p style="font-size: .9em; margin-bottom: .4em;">
+    <p class="subTitle">
         {{ subTitle }}
     </p>
 
@@ -14,7 +14,9 @@
 
 
     {% if footer == True %}
-        <p>still havng problems?  message us ✉️</p>
+        <p class="footer">
+            still havng problems?  message us ✉️
+        </p>
     {% endif %}
 
 </div>
@@ -31,6 +33,7 @@
       position: fixed;
       padding: 1vh;
 
+      height: auto;
       width: 28vw; /* 95vw on mobile */
       background-color: white;
       border: 1px solid black;
@@ -39,8 +42,13 @@
     .modalTitle{
         color: red;
         font-size:xx-large;
+        font-size: 1.6vw;
         font-weight: bold;
 
+    }
+
+    .subTitle{
+        font-size:.9vw;
     }
 
     /* #usePreciseLocationButton{
@@ -53,11 +61,19 @@
 
     } */
 
-    @media (max-width: 1250px) {
+    .footer{
+        font-size.9vw;
+    }
+
+    @media (orientation: portrait) {
       
 
       #modal{
         width: 85vw;
+      }
+
+      .modalTitle{
+        font-size: 2.9vh;
       }
 }
 </style>
