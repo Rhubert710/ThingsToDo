@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Things To Do Near Me!</title>
 
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script> -->
     <link rel="stylesheet" href="https://raw.githubusercontent.com/Rhubert710/thing_static/main/css.css">
 </head>
 
@@ -22,7 +22,9 @@
               <input type="submit" onclick="updateLocation(event, this)" value="Go" class="addressSearch_submitButton">
           </form>
 
-            <div id="map"></div>
+            <div id="map">
+              <img class="backgroundMap_img" src="https://i.ibb.co/8x7S1rS/background-img-1-copy-2.webp" alt="map_img">
+            </div>
 
             <div id="sideBar">
               <div id="daysOfWeekDiv" style="text-align: center;">
@@ -276,9 +278,8 @@ function launchModal (message) {
   //startLoadingSpinner();
 
   //set background img behind modal
-  document.getElementById('map').innerHTML = '<img id="backgroundMap_img" src="https://rhubert.pythonanywhere.com/static/background_img.webp" alt="bckgrounf_img_map">'
-  //wait for img o load before launching modal
-  document.getElementById('backgroundMap_img').onload = () =>{
+  //document.getElementById('map').innerHTML = '<img id="backgroundMap_img" src="https://rhubert.pythonanywhere.com/static/background_img.webp" alt="bckgrounf_img_map">'
+  ///document.getElementById('map').innerHTML = '<img id="backgroundMap_img" src="https://i.ibb.co/RB6R7kz/background-img.webp" alt="bckgrounf_img_map">'
 
   //create modal
   const modal = document.createElement('div');
@@ -290,7 +291,7 @@ function launchModal (message) {
 
   // console.log(message)
   }
-}
+
 
 function closeModal() {
 
@@ -438,8 +439,10 @@ function stopLoadingSpinner(params) {
 
     }
     
-  #backgroundMap_img{
-    object-fit: contain;
+  .backgroundMap_img{
+    width: 75vw;
+    height: 85vh;
+    /* object-fit: contain; */
     filter: blur(1px);
     -webkit-filter: blur(1px);
 
@@ -453,7 +456,7 @@ function stopLoadingSpinner(params) {
 .loading-text {
   font-weight: bolder;
   /* text-align: center; */
-  animation: zoom-in-zoom-out 1s ease infinite;
+  animation: zoom-in-zoom-out 2s ease infinite;
 }
 
 @keyframes zoom-in-zoom-out {

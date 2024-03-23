@@ -7,8 +7,19 @@ import json, requests , datetime
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import ensure_csrf_cookie
 
+from django.views.decorators.cache import never_cache
+
 def indexDemo(request):
     return HttpResponse("Hello, world. You're at the polls index.")
+
+
+
+
+
+
+
+
+
 
 
 @ensure_csrf_cookie
@@ -17,11 +28,6 @@ def index(request):
     # print(request.__dict__)
     # print(request.headers)
     return render(request, "mainApp/index.html", context)
-
-
-
-
-
 
 
 
