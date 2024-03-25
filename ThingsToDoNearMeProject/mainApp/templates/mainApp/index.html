@@ -5,9 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Things To Do Near Me!</title>
 
+    <meta name="description" content="Find things to do in your city or town this weekend">
+
     <!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script> -->
     <!-- <link rel="stylesheet" href="https://raw.githubusercontent.com/Rhubert710/thing_stat ic/main/css.css"> -->
 </head>
+
+
+
+
+
+
+
+
+
+
+
+
 
     <body>
 
@@ -18,12 +32,16 @@
           <div id="mapContainer">
 
           <form id="addressInputForm" style="display: flex;" action="#">
-            🌐<input type="text" id="userLocation_input" style="width: 11ch;" >
+            🌐<input type="text"  style="width: 11ch;" name="address_search_bar" >
               <input type="submit" onclick="updateLocation(event, this)" value="Go" class="addressSearch_submitButton">
           </form>
 
             <div id="map">
-              <img class="backgroundMap_img" src="https://i.ibb.co/dkRqK9W/background-img-1-copy-2.webp" alt="map_img">
+              <img class="backgroundMap_img" 
+              src="https://i.ibb.co/tZs2c19/background-img-1200.webp" 
+              srcset="https://i.ibb.co/b5rvZqP/background-img-480.webp 480w, https://i.ibb.co/ZHgGY59/background-img-1000.webp 1000w, 
+              https://i.ibb.co/tZs2c19/background-img-1200.webp 1200w, https://i.ibb.co/vqTMFkH/background-img-1400.webp 1400w"
+              alt="map_img">
             </div>
 
             <div id="sideBar">
@@ -54,7 +72,7 @@
                 <input type="checkbox" id="saturdayCheckBox" name="saturdayCheckBox" value="Boat">
               </div>
               <div class="checkBoxDiv">
-                <label for="sunCheckBox"> Sun</label>
+                <label for="sundayCheckBox"> Sun</label>
                 <input type="checkbox" id="sundayCheckBox" name="sundayCheckBox" value="Boat">
               </div>
                 
