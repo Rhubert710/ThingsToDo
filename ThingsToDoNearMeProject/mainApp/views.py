@@ -20,8 +20,6 @@ def indexDemo(request):
 
 
 
-
-
 @ensure_csrf_cookie
 def index(request):
     context={ 'pageTitle' : pageTitle} 
@@ -197,7 +195,7 @@ def get_ticketMasterDiscovery_list(lat, lon):
     results_page_number, data_list = 0, []
 
     while(True):
-        r = requests.get(f'https://app.ticketmaster.com/discovery/v2/events.json?apikey=YJLOMi9Nx8ze3SqTew85sb32Wk87AWR3&latlong=40.7561988,-73.7920859&size=199&startDateTime={datetime.date.today()}T00:00:00Z&endDateTime={datetime.date.today()+datetime.timedelta(days=6)}T00:00:00Z&radius=50&page={results_page_number}')
+        r = requests.get(f'https://app.ticketmaster.com/discovery/v2/events.json?apikey=YJLOMi9Nx8ze3SqTew85sb32Wk87AWR3&latlong={lat},{lon}&size=199&startDateTime={datetime.date.today()}T00:00:00Z&endDateTime={datetime.date.today()+datetime.timedelta(days=6)}T00:00:00Z&radius=50&page={results_page_number}')
         data = r.json()
 
         for o in data['_embedded']['events']:

@@ -6,12 +6,12 @@
     <title>Things To Do Near Me!</title>
 
     <!-- <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script> -->
-    <link rel="stylesheet" href="https://raw.githubusercontent.com/Rhubert710/thing_static/main/css.css">
+    <!-- <link rel="stylesheet" href="https://raw.githubusercontent.com/Rhubert710/thing_stat ic/main/css.css"> -->
 </head>
 
     <body>
 
-        <h1 id="logo">Things-To-Do-Near-Me.com</h1>
+        <h1 class="logo">Things-To-Do-Near-Me.com</h1>
 
         <div id="mid" style="display: flex;">
           
@@ -23,7 +23,7 @@
           </form>
 
             <div id="map">
-              <img class="backgroundMap_img" src="https://i.ibb.co/8x7S1rS/background-img-1-copy-2.webp" alt="map_img">
+              <img class="backgroundMap_img" src="https://i.ibb.co/dkRqK9W/background-img-1-copy-2.webp" alt="map_img">
             </div>
 
             <div id="sideBar">
@@ -65,7 +65,7 @@
 
         </div>
 
-        <a id="addEventButton" href="/addEventForm"> 
+        <a id="addEventButton" href="/ addEventForm"> 
           Add a Thing 
         </a>
 
@@ -355,19 +355,20 @@ function stopLoadingSpinner(params) {
 
     body{
         height: 100vh;
-        margin: 0px;
-        scrollbar-gutter: stable;
+        /* margin: 0px; */
+        /* scrollbar-gutter: stable; */
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-    }
+    }  
 
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap');
-    #logo{
+  /* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap'); */
+    .logo{   
         color: #ea0909;
-        text-align: center;
-        font-family: 'Noto Sans TC', sans-serif;
+        /* text-align: center; */
+        /* font-family: 'Noto Sans TC', sans-serif; */
+        /* font-family: sans-serif; */
 
     }       
 
@@ -440,8 +441,8 @@ function stopLoadingSpinner(params) {
     }
     
   .backgroundMap_img{
-    width: 75vw;
-    height: 85vh;
+    width: 85vw;
+    height: 75vh;
     /* object-fit: contain; */
     filter: blur(1px);
     -webkit-filter: blur(1px);
@@ -499,20 +500,16 @@ function stopLoadingSpinner(params) {
 
 
 
-    @media (max-width: 1250px) {
-      
-      #logo{
+  @media (orientation: portrait) {
+
+      .logo{
         font-size: 28px;
       }
 
-      #map{
-        height: 75vh;
-        width: 85vw;
+      .backgroundMap_img{
+          object-fit: cover;
       }
 
-      #modal{
-        width: 80vw;
-      }
 }
     
 </style>
